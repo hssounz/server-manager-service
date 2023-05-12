@@ -3,8 +3,8 @@ package org.hssounz.servermanagerservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hssounz.servermanagerservice.dao.ServerRepository;
-import org.hssounz.servermanagerservice.dtaos.ServerRequestDTO;
-import org.hssounz.servermanagerservice.dtaos.ServersPageDTO;
+import org.hssounz.servermanagerservice.dtos.ServerRequestDTO;
+import org.hssounz.servermanagerservice.dtos.ServersPageDTO;
 import org.hssounz.servermanagerservice.enums.ServerStatus;
 import org.hssounz.servermanagerservice.mappers.DTOMapper;
 import org.hssounz.servermanagerservice.model.Server;
@@ -17,11 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import static java.lang.Boolean.*;
 
@@ -34,16 +31,14 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server create(ServerRequestDTO serverRequest) {
-        
-        Server server = Server.builder()
-                .imageUrl(setServerImageUrl())
-                .build();
+        Server server = dtoMapper.fromServerRequest(serverRequest);
+        server.setImageUrl(setServerImageUrl());
         log.info("Saving new server :{}", server.getName());
         return serverRepository.save(server);
     }
     @Override
     public Server ping(String ipAddress) throws IOException {
-        log.info("Saving new server IP :{}", ipAddress);
+        log.info("Pining server IP :{}", ipAddress);
         Server server = serverRepository.findByIpAddress(ipAddress);
 
         InetAddress address = InetAddress.getByName(ipAddress);
@@ -67,7 +62,7 @@ public class ServerServiceImpl implements ServerService {
         Page<Server> servers = serverRepository.findAll(PageRequest.of(page, size));
         return ServersPageDTO.builder()
                 .currentPage(page)
-                .pageSize(size)
+                .pageSize(servers.getSize())
                 .totalPages(servers.getTotalPages())
                 .servers(servers.stream().toList())
                 .build();

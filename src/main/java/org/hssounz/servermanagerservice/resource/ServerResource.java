@@ -1,7 +1,7 @@
 package org.hssounz.servermanagerservice.resource;
 
 import lombok.RequiredArgsConstructor;
-import org.hssounz.servermanagerservice.dtaos.ServerRequestDTO;
+import org.hssounz.servermanagerservice.dtos.ServerRequestDTO;
 import org.hssounz.servermanagerservice.enums.ServerStatus;
 import org.hssounz.servermanagerservice.model.Response;
 import org.hssounz.servermanagerservice.model.Server;
@@ -59,7 +59,7 @@ public class ServerResource {
         );
     }
 
-    @PostMapping("/ping")
+    @PostMapping("/save")
     ResponseEntity<Response> saveServer(@RequestBody @Valid ServerRequestDTO serverRequest) {
         return ResponseEntity.ok(
                 Response.builder()
@@ -76,7 +76,7 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .data(Map.of("pingedServer", serverService.get(id)))
+                        .data(Map.of("server", serverService.get(id)))
                         .message("Server retrieved")
                         .status(OK)
                         .statusCode(OK.value())
@@ -97,6 +97,6 @@ public class ServerResource {
     }
     @GetMapping(path = "/image/{fileName}", produces = MediaType.IMAGE_PNG_VALUE)
     byte[] getServerImage(@PathVariable String fileName) throws IOException {
-        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Images/servers/" + fileName));
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Pictures/servers/" + fileName));
     }
 }

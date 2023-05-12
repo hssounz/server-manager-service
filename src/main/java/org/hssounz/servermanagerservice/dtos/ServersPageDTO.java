@@ -1,4 +1,4 @@
-package org.hssounz.servermanagerservice.dtaos;
+package org.hssounz.servermanagerservice.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

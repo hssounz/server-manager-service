@@ -1,6 +1,6 @@
 package org.hssounz.servermanagerservice.mappers.impl;
 
-import org.hssounz.servermanagerservice.dtaos.ServerRequestDTO;
+import org.hssounz.servermanagerservice.dtos.ServerRequestDTO;
 import org.hssounz.servermanagerservice.mappers.DTOMapper;
 import org.hssounz.servermanagerservice.model.Server;
 import org.springframework.beans.BeanUtils;
