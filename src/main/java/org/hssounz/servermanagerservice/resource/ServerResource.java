@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.LocalDateTime.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -29,7 +30,8 @@ public class ServerResource {
     ResponseEntity<Response> getServers(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size
-            ) {
+            ) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
@@ -47,7 +49,7 @@ public class ServerResource {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
-                        .data(Map.of("pingedServer", server))
+                        .data(Map.of("server", server))
                         .message(
                                 server.getStatus() == ServerStatus.SERVER_UP
                                         ? "Ping succeed"
@@ -61,6 +63,7 @@ public class ServerResource {
 
     @PostMapping("/save")
     ResponseEntity<Response> saveServer(@RequestBody @Valid ServerRequestDTO serverRequest) {
+        System.out.println(serverRequest);
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(now())
